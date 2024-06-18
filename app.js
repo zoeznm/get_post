@@ -1,5 +1,6 @@
 const http = require('http');
 const fs = require('fs');
+const qs = require("querystring");
 
 const server = http.createServer((request,response)=> {
   if(request.method === "GET") {
@@ -20,7 +21,10 @@ const server = http.createServer((request,response)=> {
       request.on ("end",()=> {
         response.setHeader("Content-Type", "text/html", "charset=utf8");
         response.writeHead(200);
-        const parseData = new URLSearchParams(body);
+        
+        // const parseData = new URLSearchParams(body);
+        const parseData =qs.parse(body);
+        console.log(parseData.id);
         const data = parseData.get(data);
         const html =`
         <!DOCTYPE html>
@@ -31,7 +35,7 @@ const server = http.createServer((request,response)=> {
           <title>Document</title>
         </head>
         <body>
-          <div>${data}</div>
+          <div>${parseData}</div>
         </body>
         </html>`;
 response.write(html);
@@ -42,3 +46,7 @@ response.end();
 });
 
 server.listen(3000);
+
+fs.writeFile("안녕하세요","웹디자인", (err)=> {
+  console.log(err)
+})
